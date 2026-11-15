@@ -3,7 +3,7 @@
 A área de trabalho da Neovanguard para Arch Linux x86_64 (Wayland), em beta.
 Pacotes prontos: nada é compilado no seu computador.
 
-**Versão atual: 0.6.3** — ainda incompleta; a 1.0 sai quando não houver defeito
+**Versão atual: 0.6.4** — ainda incompleta; a 1.0 sai quando não houver defeito
 conhecido.
 
 ## Instalar

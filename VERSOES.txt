@@ -1,10 +1,10 @@
-Birfree Beta 0.6.3 (o mouse volta a alcançar a barra e a dock)
+Birfree Beta 0.6.4 (animações sem engasgo)
 Base de execução: KDE/Qt do sistema travado em 01/10; forks ainda em desenvolvimento.
-Commit dos fontes: 1f3cc54a6eab9e555c7df46b1803838663a83e4e
+Commit dos fontes: 847e37763abf0d63a24343109c4a3633ef3ff553
 Terminal Birfree: Konsole v26.08.1 + branch birfree/1.0 em 66eb0863e2dbb2e0fddd296d2f3245ad273ae141
 
-birfree-icons 1.0.0.r26.g1511a48e-1
-birfree 1:0.6.3.r172.g1f3cc54a-1
+birfree-icons 1.0.0.r27.g2ff3eae4-1
+birfree 1:0.6.4.r175.g847e3776-1
 birfree-terminal 26.08.1.r8.g66eb0863e-1
 
 installed = kcoreaddons-6.30.0-1-x86_64
