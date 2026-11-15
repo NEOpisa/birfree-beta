@@ -1,10 +1,10 @@
-Birfree Beta 0.6.1 (cliques na barra/dock com menu aberto sobre tela cheia, abertura Esvanecer sem relógio, animações com mola, menu de apps em Rust)
+Birfree Beta 0.6.2 (cliques no alto da tela, clique só no vidro da barra/dock, barra e dock em tela cheia só com o Meta)
 Base de execução: KDE/Qt do sistema travado em 01/10; forks ainda em desenvolvimento.
-Commit dos fontes: bae43ee60e8062c112d5de8df3d2119cf4d85332
+Commit dos fontes: 832e808833d204a856cfc8aaae9fe7a196a45c4a
 Terminal Birfree: Konsole v26.08.1 + branch birfree/1.0 em 66eb0863e2dbb2e0fddd296d2f3245ad273ae141
 
 birfree-icons 1.0.0.r26.g1511a48e-1
-birfree 1:0.6.1.r166.gbae43ee6-1
+birfree 1:0.6.2.r170.g832e8088-1
 birfree-terminal 26.08.1.r8.g66eb0863e-1
 
 installed = kcoreaddons-6.30.0-1-x86_64
