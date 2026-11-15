@@ -1,10 +1,10 @@
-Birfree Beta 0.6 (mais rápido: entrada ~0,8 s antes, painéis depois da abertura, painel de som instantâneo, cache de ícones válido; Xwayland obrigatório)
+Birfree Beta 0.6.1 (cliques na barra/dock com menu aberto sobre tela cheia, abertura Esvanecer sem relógio, animações com mola, menu de apps em Rust)
 Base de execução: KDE/Qt do sistema travado em 01/10; forks ainda em desenvolvimento.
-Commit dos fontes: d820466793f0034aff525f462253cd15f582d048
+Commit dos fontes: bae43ee60e8062c112d5de8df3d2119cf4d85332
 Terminal Birfree: Konsole v26.08.1 + branch birfree/1.0 em 66eb0863e2dbb2e0fddd296d2f3245ad273ae141
 
-birfree-icons 1.0.0.r25.g17f315ba-1
-birfree 1:0.6.r160.gd8204667-1
+birfree-icons 1.0.0.r26.g1511a48e-1
+birfree 1:0.6.1.r166.gbae43ee6-1
 birfree-terminal 26.08.1.r8.g66eb0863e-1
 
 installed = kcoreaddons-6.30.0-1-x86_64
