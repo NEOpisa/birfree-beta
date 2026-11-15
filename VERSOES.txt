@@ -1,10 +1,10 @@
-Birfree Beta 0.6.5 (interface mais leve)
+Birfree Beta 0.6.5 · patch 1 (interface mais leve; barra sem dicas)
 Base de execução: KDE/Qt do sistema travado em 01/10; forks ainda em desenvolvimento.
-Commit dos fontes: 4e4ec3f57eb09628ec4a5c841ea801b4bcd12771
+Commit dos fontes: 2ab1f78f94ba334d028a5f5ba8c1c844ad8d0426
 Terminal Birfree: Konsole v26.08.1 + branch birfree/1.0 em 66eb0863e2dbb2e0fddd296d2f3245ad273ae141
 
 birfree-icons 1.0.0.r27.g2ff3eae4-1
-birfree 1:0.6.5.r181.g4e4ec3f5-1
+birfree 1:0.6.5.r184.g2ab1f78f-1
 birfree-terminal 26.08.1.r8.g66eb0863e-1
 
 installed = kcoreaddons-6.30.0-1-x86_64
