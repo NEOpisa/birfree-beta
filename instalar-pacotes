@@ -70,8 +70,24 @@ if [[ -f "$ROOT/VERSOES.txt" ]] && ! pilha_ok; then
     exit 1
   }
 fi
-printf '\nO pacman vai mostrar a transação e pedir confirmação.\n'
-sudo pacman -U --overwrite usr/share/wayland-sessions/birfree.desktop "${pacotes[@]}"
+# Pacote já instalado na mesma versão fica de fora: reinstalar o Terminal
+# Birfree faz ele se reabrir com as abas, e a tela de quem roda o
+# atualizar-birfree dentro dele se embaralhava
+novos=()
+for arquivo in "${pacotes[@]}"; do
+  read -r nome versao < <(pacman -Qp "$arquivo")
+  if [[ "$(pacman -Q "$nome" 2>/dev/null)" == "$nome $versao" ]]; then
+    printf '%s %s já está instalado.\n' "$nome" "$versao"
+  else
+    novos+=("$arquivo")
+  fi
+done
+if ((${#novos[@]} > 0)); then
+  printf '\nO pacman vai mostrar a transação e pedir confirmação.\n'
+  sudo pacman -U --overwrite usr/share/wayland-sessions/birfree.desktop "${novos[@]}"
+else
+  printf '\nNada novo para instalar.\n'
+fi
 # Congela o KDE/Qt no -Syu (uma linha na seção [options] do pacman.conf)
 if ! grep -qxF "$INCLUIR" /etc/pacman.conf; then
   sudo sed -i "/^\[options\]/a $INCLUIR" /etc/pacman.conf
