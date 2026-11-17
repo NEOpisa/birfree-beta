@@ -1,11 +1,11 @@
 Birfree Beta 0.6.6 (Terminal Birfree em Rust; troca de dispositivo no som)
-Patch (devs): 0.6.6-p4 — botão do menu na dock sem dica ao passar o mouse (sobre o p3: login em Rust, entrada mais rápida)
+Patch (devs): 0.6.6-p5 — abrindo app: ícone pula só na dock, anel no accent ao lado do mouse (sobre o p4)
 Base de execução: KDE/Qt do sistema travado em 01/10; forks ainda em desenvolvimento.
-Commit dos fontes: babe688ac672b024d2ecf7a278506498cf1f02e2
+Commit dos fontes: c7db965e4f782ca66c739a4705ef541308814857
 Terminal Birfree: em Rust, na pasta birfree-terminal do mesmo commit
 
-birfree-icons 1.0.0.r32.gb3459ae4-1
-birfree 1:0.6.6.r227.gbabe688a-1
+birfree-icons 1.0.0.r33.gc7db965e-1
+birfree 1:0.6.6.r229.gc7db965e-1
 birfree-terminal 1:0.6.6.r11.gc167ed4c-1
 
 installed = kcoreaddons-6.30.0-1-x86_64
