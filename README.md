@@ -7,7 +7,7 @@
 > [Remover](#remover)).
 
 O Birfree é a área de trabalho da Neovanguard, **pensada para o
-Neovanguard OS** (em breve). Este beta roda em Arch Linux x86_64
+[Neovanguard OS](https://nvgsec.com)** (em breve). Este beta roda em Arch Linux x86_64
 (Wayland), com pacotes prontos: nada é compilado no seu computador.
 
 **Versão atual: 0.6.6**, ainda incompleta. A 1.0 sai quando não houver
