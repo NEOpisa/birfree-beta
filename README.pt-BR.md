@@ -10,7 +10,8 @@
 
 O Birfree é a área de trabalho da Neovanguard, **pensada para o
 [Neovanguard OS](https://nvgsec.com)** (em breve). Este beta roda em Arch Linux x86_64
-(Wayland), com pacotes prontos: nada é compilado no seu computador.
+(Wayland), com pacotes prontos: nada é compilado no seu computador. Sendo feito em Rust (veja
+[Feito em Rust](#feito-em-rust)).
 
 **Versão atual: 0.6.6**, ainda incompleta. A 1.0 sai quando não houver
 defeito conhecido.
@@ -179,6 +180,16 @@ Entre no Plasma e rode, na pasta do arquivo baixado:
 Tira os pacotes do Birfree (todas as partes), devolve a aparência do Plasma, desfaz a trava do
 KDE/Qt no `pacman -Syu` e a tela de entrada anterior. Suas configurações em
 `~/.config/birfree*` ficam (apague à mão se quiser).
+
+## Feito em Rust
+
+O Birfree está sendo escrito em **Rust**, e o objetivo é que ele seja todo em
+Rust. Já estão em Rust hoje: o núcleo da shell (janelas, dock, menu, bandeja,
+energia, avisos, cor de destaque, via [cxx-qt](https://github.com/KDAB/cxx-qt)),
+o Terminal Birfree (sobre o `alacritty_terminal`), os programas de entrada da
+sessão, a parte de trás das Configurações, o monitor do sistema, o recolorido
+dos ícones e a ponte do Discord. A interface ainda é Qt/QML sobre o KWin, e o
+C++ que sobrou passa para Rust um pouco a cada patch.
 
 ## Como o Birfree é feito
 

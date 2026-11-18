@@ -11,7 +11,8 @@
 Birfree is the Neovanguard desktop, **designed for
 [Neovanguard OS](https://nvgsec.com)** (coming soon). This beta runs on Arch
 Linux x86_64 (Wayland) with ready-made packages: nothing is compiled on your
-computer.
+computer. Being written in Rust (see
+[Built with Rust](#built-with-rust)).
 
 **Current version: 0.6.6**, still incomplete. 1.0 ships when there are no
 known bugs left.
@@ -179,6 +180,16 @@ Log in to Plasma and run, in the folder of the downloaded archive:
 It removes the Birfree packages (all parts), restores the Plasma look, undoes
 the KDE/Qt lock on `pacman -Syu` and the previous login screen. Your settings
 in `~/.config/birfree*` stay (delete them by hand if you want).
+
+## Built with Rust
+
+Birfree is being written in **Rust**, and the goal is for all of it to be
+Rust. Already in Rust today: the shell core (windows, dock, menu, tray,
+power, notifications, accent color, via [cxx-qt](https://github.com/KDAB/cxx-qt)),
+Birfree Terminal (on `alacritty_terminal`), the session login programs, the
+Settings backend, the system monitor, the icon recoloring and the Discord
+bridge. The interface is still Qt/QML on top of KWin, and the remaining C++
+moves to Rust a little more with each patch.
 
 ## How Birfree is made
 
