@@ -1,10 +1,62 @@
 # Birfree Beta
 
-A área de trabalho da Neovanguard para Arch Linux x86_64 (Wayland), em beta.
-Pacotes prontos: nada é compilado no seu computador.
+> [!WARNING]
+> **Isto é um beta.** O Birfree ainda está em desenvolvimento e pode ter
+> defeitos, inclusive na entrada da sessão. **Instale por sua conta e risco**:
+> faça backup do que importa antes e tenha como voltar ao Plasma (veja
+> [Remover](#remover)).
 
-**Versão atual: 0.6.6** — ainda incompleta; a 1.0 sai quando não houver defeito
-conhecido.
+O Birfree é a área de trabalho da Neovanguard, **pensada para o
+Neovanguard OS** (em breve). Este beta roda em Arch Linux x86_64
+(Wayland), com pacotes prontos: nada é compilado no seu computador.
+
+**Versão atual: 0.6.6**, ainda incompleta. A 1.0 sai quando não houver
+defeito conhecido.
+
+![Birfree com o Terminal Birfree e o Dolphin](imagens/birfree.jpg)
+
+## O que ele tem de diferente
+
+### O tema segue o papel de parede
+
+Troque o papel de parede e a cor de destaque muda junto, tirada da imagem: a
+barra, a dock, o vidro das janelas, os ícones das pastas e os widgets. Sem
+abrir configuração nenhuma.
+
+![A cor do sistema mudando com cada papel de parede](imagens/troca-de-tema.gif)
+
+![Seis papéis de parede, seis temas](imagens/temas.jpg)
+
+### Vidro Birfrost
+
+Barra, dock, menus e janelas num vidro próprio, com moldura, estilo Qt e tema
+GTK feitos para o Birfree. Também dá para usar só o vidro no KDE Plasma
+(`./instalar-birfree vidro`).
+
+### A dock do seu jeito
+
+| Flutuante | Integrada (uma barra só) |
+|---|---|
+| ![Dock flutuante](imagens/dock-flutuante.jpg) | ![Dock integrada](imagens/dock-integrada.jpg) |
+| **Na lateral** | **Personalizar a dock** |
+| ![Dock na lateral](imagens/dock-lateral.jpg) | ![Painel Personalizar a dock](imagens/personalizar-dock.jpg) |
+
+Lupa (suave ou grande), indicadores em pontos ou em barra, esconder sozinha,
+pilhas de pastas e a lixeira, tudo arrastando:
+
+![Lupa grande na dock](imagens/dock-lupa.png)
+
+### E mais
+
+| Menu de aplicativos | Central de controle |
+|---|---|
+| ![Menu](imagens/menu.jpg) | ![Central de controle](imagens/central.jpg) |
+| **Monitor do sistema** | **Visão geral (Meta+W)** |
+| ![Monitor do sistema](imagens/monitor.jpg) | ![Visão geral das janelas](imagens/visao-geral.jpg) |
+
+Seletor de papel de parede com Meta+Shift+clique na área de trabalho:
+
+![Seletor de papel de parede](imagens/papel-de-parede.jpg)
 
 ## Instalar
 
@@ -125,3 +177,12 @@ Entre no Plasma e rode, na pasta do arquivo baixado:
 Tira os pacotes do Birfree (todas as partes), devolve a aparência do Plasma, desfaz a trava do
 KDE/Qt no `pacman -Syu` e a tela de entrada anterior. Suas configurações em
 `~/.config/birfree*` ficam (apague à mão se quiser).
+
+## Como o Birfree é feito
+
+Usamos inteligência artificial para auditar o código, escrever a
+documentação e trazer insights sobre o código.
+
+Os papéis de parede das fotos vêm com o Birfree (Pepper&Carrot, telescópio
+James Webb e fotos do Brasil); os créditos de cada um ficam em
+`/usr/share/birfree/wallpapers/CREDITOS.md` depois de instalar.
