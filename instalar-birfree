@@ -7,12 +7,28 @@ case "${1:-}" in
   --mostrar) exec "$ROOT/instalar-pacotes" --mostrar ;;
   --migrar) shift; exec bash "$ROOT/so-birfree.sh" "$@" ;;
   --simular|--desfazer) exec bash "$ROOT/so-birfree.sh" "$@" ;;
+  --remover)
+    # Tira o Birfree e deixa o Plasma como estava
+    case ":${XDG_CURRENT_DESKTOP:-}:" in
+      *:Birfree:*) printf 'Saia do Birfree e entre no Plasma antes de remover.\n' >&2; exit 1 ;;
+    esac
+    mapfile -t instalados < <(pacman -Qq birfree birfree-icons birfree-terminal 2>/dev/null)
+    ((${#instalados[@]})) || { printf 'O Birfree não está instalado.\n'; exit 0; }
+    devolver=$(pacman -Qlq birfree 2>/dev/null | grep -m1 '/birfree-devolver-kde$' || true)
+    [[ -n "$devolver" && -x "$devolver" ]] && XDG_CURRENT_DESKTOP=KDE "$devolver"
+    printf 'O pacman vai mostrar a remoção e pedir confirmação.\n'
+    sudo pacman -R "${instalados[@]}"
+    sudo sed -i '\#^Include = /etc/pacman.d/birfree-congelar.conf$#d' /etc/pacman.conf
+    [[ -f /etc/sddm.conf ]] && sudo sed -i '/^# Birfree: tela de entrada do Birfree no lugar de$/{N;s/^# Birfree: tela de entrada do Birfree no lugar de\n# //}' /etc/sddm.conf
+    printf '\nBirfree removido. O pacman -Syu volta a atualizar o KDE e o Qt.\n'
+    ;;
   -h|--help)
     printf '%s\n' './instalar-birfree              instala/atualiza a DE completa na base atual' \
       './instalar-birfree --atualizar  mesma atualização, para quem já usa Birfree' \
       './instalar-birfree --mostrar    confere e lista os pacotes sem instalar' \
       './instalar-birfree --migrar     migração antiga, com mudanças no sistema' \
-      './instalar-birfree --desfazer   desfaz uma migração anterior'
+      './instalar-birfree --desfazer   desfaz uma migração anterior' \
+      './instalar-birfree --remover    tira o Birfree (rode dentro do Plasma)'
     ;;
   *) printf 'Opção desconhecida: %s\n' "$1" >&2; exit 1 ;;
 esac
