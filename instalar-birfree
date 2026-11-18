@@ -1,34 +1,248 @@
 #!/usr/bin/env bash
-# Instala a DE completa; a migração antiga continua disponível explicitamente.
+# O instalador do Birfree: a área de trabalho inteira ou só uma parte dela
+# (que também serve no KDE Plasma comum).
+#
+#   ./instalar-birfree                 a área de trabalho completa
+#   ./instalar-birfree vidro           só o vidro Birfrost, aplicado no Plasma
+#   ./instalar-birfree dock            só a dock, dentro do Plasma
+#   ./instalar-birfree monitor         só o monitor do sistema (widget do Plasma)
+#   ./instalar-birfree icones          só os Birfree Icons
+#   ./instalar-birfree terminal        só o Terminal Birfree
+#   ./instalar-birfree dock monitor    várias partes de uma vez
+#   ./instalar-birfree lista           o que está instalado e o que vem no arquivo
+#   ./instalar-birfree remover [parte] tira tudo ou só uma parte
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
+[[ $EUID -ne 0 ]] || { echo 'Execute como usuário normal.' >&2; exit 1; }
+
+ESTADO="${XDG_STATE_HOME:-$HOME/.local/state}/birfree"
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}"
+PARTES=(vidro dock monitor icones terminal)
+
+pacote_de() {
+  case "$1" in
+    tudo) echo birfree ;;
+    vidro) echo birfree-vidro ;;
+    dock) echo birfree-dock ;;
+    monitor) echo birfree-sysmon ;;
+    icones) echo birfree-icons ;;
+    terminal) echo birfree-terminal ;;
+    *) return 1 ;;
+  esac
+}
+
+ajuda() {
+  sed -n '2,13p' "$0" | sed 's/^# \{0,1\}//'
+  printf '%s\n' '' 'Também:' \
+    '  ./instalar-birfree --mostrar    confere e lista os pacotes sem instalar' \
+    '  ./instalar-birfree --atualizar  atualiza o que já está instalado' \
+    '  ./instalar-birfree --migrar     migração antiga (deixa só o Birfree, tira o Plasma)' \
+    '  ./instalar-birfree --desfazer   desfaz uma migração anterior'
+}
+
+na_sessao_birfree() { [[ ":${XDG_CURRENT_DESKTOP:-}:" == *:Birfree:* ]]; }
+
+# ---------------------------------------------------- cópias antigas --
+# O instalar.sh antigo do monitor copiava para o ~/.local; a cópia do
+# usuário vence a do pacote e escondia o monitor novo
+limpar_antigos() {
+  local d="${XDG_DATA_HOME:-$HOME/.local/share}"
+  rm -rf "$d/birfree/extensoes/sysmon" "$d/plasma/plasmoids/org.birfree.widget.sysmon"
+  if [[ -f "$HOME/.local/bin/birfree-sysmon" ]] && head -c2 "$HOME/.local/bin/birfree-sysmon" | grep -q '#!'; then
+    rm -f "$HOME/.local/bin/birfree-sysmon"
+  fi
+}
+
+# ------------------------------------------------------------- vidro --
+# Aplica no Plasma o que a sessão Birfree usa: moldura, estilo Qt, cores,
+# cursor e tema GTK. O que havia antes fica em $ESTADO/vidro-antes (o
+# "remover vidro" põe de volta), e o birfree-devolver-kde deixa de desfazer
+ler() { kreadconfig6 --file "$1" --group "$2" --key "$3" 2>/dev/null || true; }
+aplicar_vidro() {
+  if na_sessao_birfree; then
+    printf 'Na sessão Birfree o vidro já vale; ele foi aplicado para o Plasma.\n'
+  fi
+  mkdir -p "$ESTADO"
+  if [[ ! -f "$ESTADO/vidro-antes" ]]; then
+    {
+      printf 'library=%s\n' "$(ler kwinrc org.kde.kdecoration2 library)"
+      printf 'theme=%s\n' "$(ler kwinrc org.kde.kdecoration2 theme)"
+      printf 'widgetStyle=%s\n' "$(ler kdeglobals KDE widgetStyle)"
+      printf 'ColorScheme=%s\n' "$(ler kdeglobals General ColorScheme)"
+      printf 'cursorTheme=%s\n' "$(ler kcminputrc Mouse cursorTheme)"
+      printf 'gtk=%s\n' "$(ler "$CONFIG/gtk-3.0/settings.ini" Settings gtk-theme-name)"
+    } > "$ESTADO/vidro-antes"
+  fi
+  local accent
+  accent=$(ler kdeglobals General AccentColor)
+  kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key library org.birfree.birfrost
+  kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key theme ""
+  kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle Birfrost
+  plasma-apply-colorscheme Birfree >/dev/null 2>&1 || true
+  if [[ "$accent" =~ ^([0-9]+),([0-9]+),([0-9]+) ]]; then
+    plasma-apply-colorscheme --accent-color "$(printf '#%02x%02x%02x' "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}" "${BASH_REMATCH[3]}")" >/dev/null 2>&1 || true
+  fi
+  plasma-apply-cursortheme Birfree-Cursors >/dev/null 2>&1 \
+    || kwriteconfig6 --file kcminputrc --group Mouse --key cursorTheme Birfree-Cursors
+  local v
+  for v in gtk-3.0 gtk-4.0; do
+    mkdir -p "$CONFIG/$v"
+    kwriteconfig6 --file "$CONFIG/$v/settings.ini" --group Settings --key gtk-theme-name Birfrost
+  done
+  command -v gsettings >/dev/null && gsettings set org.gnome.desktop.interface gtk-theme Birfrost 2>/dev/null || true
+  # O devolver-kde põe de volta o que a sessão Birfree trocou; agora é escolha
+  if [[ -f "$ESTADO/kde-original" ]]; then
+    grep -vE '^(ini:kwinrc:org\.kde\.kdecoration2:|ini:kdeglobals:KDE:widgetStyle|esquema|[^	]*gtk-theme|[^	]*cursor[Tt-])' \
+      "$ESTADO/kde-original" > "$ESTADO/kde-original.novo" || true
+    mv "$ESTADO/kde-original.novo" "$ESTADO/kde-original"
+  fi
+  qdbus6 org.kde.KWin /KWin reconfigure >/dev/null 2>&1 || true
+  printf '\nVidro aplicado. Apps abertos pegam o estilo novo quando abrirem de novo.\n'
+}
+
+desfazer_vidro() {
+  local antes="$ESTADO/vidro-antes" valor
+  valor() { sed -n "s/^$1=//p" "$antes" 2>/dev/null | head -n1; }
+  local lib tema estilo esquema cursor gtk
+  lib=$(valor library); tema=$(valor theme); estilo=$(valor widgetStyle)
+  esquema=$(valor ColorScheme); cursor=$(valor cursorTheme); gtk=$(valor gtk)
+  kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key library "${lib:-org.kde.breeze}"
+  kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key theme "${tema:-Breeze}"
+  kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle "${estilo:-Breeze}"
+  plasma-apply-colorscheme "${esquema:-BreezeLight}" >/dev/null 2>&1 || true
+  plasma-apply-cursortheme "${cursor:-breeze_cursors}" >/dev/null 2>&1 || true
+  local v
+  for v in gtk-3.0 gtk-4.0; do
+    [[ -f "$CONFIG/$v/settings.ini" ]] && kwriteconfig6 --file "$CONFIG/$v/settings.ini" --group Settings --key gtk-theme-name "${gtk:-Breeze}"
+  done
+  command -v gsettings >/dev/null && gsettings set org.gnome.desktop.interface gtk-theme "${gtk:-Breeze}" 2>/dev/null || true
+  rm -f "$antes"
+  qdbus6 org.kde.KWin /KWin reconfigure >/dev/null 2>&1 || true
+}
+
+# -------------------------------------------------------------- dock --
+ligar_dock() {
+  mkdir -p "$CONFIG/autostart"
+  cp /usr/share/birfree/org.birfree.dock.desktop "$CONFIG/autostart/org.birfree.dock.desktop"
+  if [[ ":${XDG_CURRENT_DESKTOP:-}:" == *:KDE:* ]] && ! pgrep -u "$EUID" -f -- 'birfree-shell --so-dock' >/dev/null; then
+    setsid -f birfree-shell --so-dock >/dev/null 2>&1 || true
+  fi
+  printf '\nA dock do Birfree abre junto com o Plasma. Para ficar só com ela, tire o\npainel do Plasma (clique direito no painel › Mostrar alternativas/Remover painel).\nClique direito na dock › Personalizar a dock para mudar peças, ordem e aparência.\n'
+}
+desligar_dock() {
+  rm -f "$CONFIG/autostart/org.birfree.dock.desktop"
+  pkill -u "$EUID" -f -- 'birfree-shell --so-dock' 2>/dev/null || true
+}
+
+# -------------------------------------------------------- instalação --
+instalar() {
+  local partes=("$@") pacotes=() p
+  for p in "${partes[@]}"; do
+    pacotes+=("$(pacote_de "$p")")
+  done
+  [[ " ${partes[*]} " == *" tudo "* ]] && pacotes=()
+  "$ROOT/instalar-pacotes" "${pacotes[@]}"
+  limpar_antigos
+  for p in "${partes[@]}"; do
+    case "$p" in
+      tudo) printf '\nPronto. Salve seu trabalho, saia da sessão e entre em Birfree.\n' ;;
+      vidro) aplicar_vidro ;;
+      dock) ligar_dock ;;
+      monitor) printf '\nMonitor do sistema: no Plasma, Adicionar widgets › Monitor do sistema (Birfree);\nno Birfree, já vem na barra (Configurações › Birfree › Monitor do sistema).\n' ;;
+      icones) printf '\nBirfree Icons: escolha em Configurações do Sistema › Cores e temas › Ícones.\n' ;;
+      terminal) printf '\nTerminal Birfree instalado (menu › Terminal Birfree).\n' ;;
+    esac
+  done
+}
+
+lista() {
+  printf '%-10s %-18s %-34s %s\n' PARTE PACOTE INSTALADO 'NO ARQUIVO'
+  local p nome inst arq
+  for p in tudo "${PARTES[@]}"; do
+    nome=$(pacote_de "$p")
+    inst=$(pacman -Q "$nome" 2>/dev/null | cut -d' ' -f2 || true)
+    arq=$(ls "$ROOT/pacotes/$nome"-[0-9]*.pkg.tar.zst 2>/dev/null | head -n1 || true)
+    [[ -n "$arq" ]] && arq=$(pacman -Qp "$arq" 2>/dev/null | cut -d' ' -f2)
+    printf '%-10s %-18s %-34s %s\n' "$p" "$nome" "${inst:--}" "${arq:--}"
+  done
+}
+
+remover_tudo() {
+  # Tira o Birfree e deixa o Plasma como estava
+  if na_sessao_birfree; then
+    printf 'Saia do Birfree e entre no Plasma antes de remover.\n' >&2
+    exit 1
+  fi
+  mapfile -t instalados < <(pacman -Qq birfree birfree-vidro birfree-dock birfree-sysmon birfree-icons birfree-terminal 2>/dev/null)
+  ((${#instalados[@]})) || { printf 'O Birfree não está instalado.\n'; exit 0; }
+  devolver=$(pacman -Qlq birfree 2>/dev/null | grep -m1 '/birfree-devolver-kde$' || true)
+  [[ -n "$devolver" && -x "$devolver" ]] && XDG_CURRENT_DESKTOP=KDE "$devolver"
+  [[ -f "$ESTADO/vidro-antes" ]] && desfazer_vidro
+  desligar_dock
+  printf 'O pacman vai mostrar a remoção e pedir confirmação.\n'
+  sudo pacman -R "${instalados[@]}"
+  sudo sed -i -e '\#^Include = /etc/pacman.d/birfree-congelar.conf$#d' \
+              -e '\#^Include = /etc/pacman.d/birfree-congelar-partes.conf$#d' /etc/pacman.conf
+  sudo rm -f /etc/pacman.d/birfree-congelar-partes.conf
+  [[ -f /etc/sddm.conf ]] && sudo sed -i '/^# Birfree: tela de entrada do Birfree no lugar de$/{N;s/^# Birfree: tela de entrada do Birfree no lugar de\n# //}' /etc/sddm.conf
+  printf '\nBirfree removido. O pacman -Syu volta a atualizar o KDE e o Qt.\n'
+}
+
+remover_parte() {
+  local p=$1 nome
+  nome=$(pacote_de "$p") || { printf 'Parte desconhecida: %s (%s)\n' "$p" "${PARTES[*]}" >&2; exit 1; }
+  if pacman -Q birfree >/dev/null 2>&1 && [[ "$nome" =~ ^birfree-(vidro|dock|sysmon)$ ]]; then
+    printf 'O %s faz parte do Birfree completo instalado; para tirar, ./instalar-birfree remover\n' "$nome" >&2
+    exit 1
+  fi
+  case "$p" in
+    vidro) desfazer_vidro ;;
+    dock) desligar_dock ;;
+  esac
+  if pacman -Q "$nome" >/dev/null 2>&1; then
+    sudo pacman -R "$nome"
+  else
+    printf '%s não está instalado.\n' "$nome"
+  fi
+  # Sem nenhuma parte com plugins, o congelamento das partes sai
+  if ! pacman -Q birfree-vidro birfree-dock birfree-sysmon birfree-terminal >/dev/null 2>&1 \
+     && [[ -f /etc/pacman.d/birfree-congelar-partes.conf ]]; then
+    sudo sed -i '\#^Include = /etc/pacman.d/birfree-congelar-partes.conf$#d' /etc/pacman.conf
+    sudo rm -f /etc/pacman.d/birfree-congelar-partes.conf
+  fi
+}
+
+# ------------------------------------------------------------ comando --
 case "${1:-}" in
-  ''|--atualizar) exec "$ROOT/instalar-pacotes" ;;
+  ''|tudo) instalar tudo ;;
+  --atualizar)
+    # O que já está instalado, na versão deste arquivo
+    instalados=()
+    for p in tudo "${PARTES[@]}"; do
+      pacman -Q "$(pacote_de "$p")" >/dev/null 2>&1 && instalados+=("$p")
+    done
+    ((${#instalados[@]})) || instalados=(tudo)
+    "$ROOT/instalar-pacotes" $(for p in "${instalados[@]}"; do pacote_de "$p"; done)
+    limpar_antigos
+    printf '\nAtualização concluída. Salve seu trabalho, saia da sessão e entre novamente.\n'
+    ;;
   --mostrar) exec "$ROOT/instalar-pacotes" --mostrar ;;
   --migrar) shift; exec bash "$ROOT/so-birfree.sh" "$@" ;;
   --simular|--desfazer) exec bash "$ROOT/so-birfree.sh" "$@" ;;
-  --remover)
-    # Tira o Birfree e deixa o Plasma como estava
-    case ":${XDG_CURRENT_DESKTOP:-}:" in
-      *:Birfree:*) printf 'Saia do Birfree e entre no Plasma antes de remover.\n' >&2; exit 1 ;;
-    esac
-    mapfile -t instalados < <(pacman -Qq birfree birfree-icons birfree-terminal 2>/dev/null)
-    ((${#instalados[@]})) || { printf 'O Birfree não está instalado.\n'; exit 0; }
-    devolver=$(pacman -Qlq birfree 2>/dev/null | grep -m1 '/birfree-devolver-kde$' || true)
-    [[ -n "$devolver" && -x "$devolver" ]] && XDG_CURRENT_DESKTOP=KDE "$devolver"
-    printf 'O pacman vai mostrar a remoção e pedir confirmação.\n'
-    sudo pacman -R "${instalados[@]}"
-    sudo sed -i '\#^Include = /etc/pacman.d/birfree-congelar.conf$#d' /etc/pacman.conf
-    [[ -f /etc/sddm.conf ]] && sudo sed -i '/^# Birfree: tela de entrada do Birfree no lugar de$/{N;s/^# Birfree: tela de entrada do Birfree no lugar de\n# //}' /etc/sddm.conf
-    printf '\nBirfree removido. O pacman -Syu volta a atualizar o KDE e o Qt.\n'
+  lista|--lista) lista ;;
+  remover|--remover)
+    shift
+    if (($#)); then
+      for p in "$@"; do remover_parte "$p"; done
+    else
+      remover_tudo
+    fi
     ;;
-  -h|--help)
-    printf '%s\n' './instalar-birfree              instala/atualiza a DE completa na base atual' \
-      './instalar-birfree --atualizar  mesma atualização, para quem já usa Birfree' \
-      './instalar-birfree --mostrar    confere e lista os pacotes sem instalar' \
-      './instalar-birfree --migrar     migração antiga, com mudanças no sistema' \
-      './instalar-birfree --desfazer   desfaz uma migração anterior' \
-      './instalar-birfree --remover    tira o Birfree (rode dentro do Plasma)'
+  -h|--help|ajuda) ajuda ;;
+  *)
+    for p in "$@"; do
+      pacote_de "$p" >/dev/null || { printf 'Parte desconhecida: %s\nPartes: %s (ou nada, para tudo)\n' "$p" "${PARTES[*]}" >&2; exit 1; }
+    done
+    instalar "$@"
     ;;
-  *) printf 'Opção desconhecida: %s\n' "$1" >&2; exit 1 ;;
 esac

@@ -21,6 +21,23 @@ cd Birfree-Beta-x86_64
 
 Depois, saia da sessão e entre em **Birfree**.
 
+### Só uma parte (também no KDE Plasma comum)
+
+O mesmo instalador traz peças avulsas, sem a área de trabalho inteira:
+
+```sh
+./instalar-birfree vidro      # o vidro Birfrost no Plasma: moldura, estilo, cores, cursor e GTK
+./instalar-birfree dock       # a dock do Birfree dentro do Plasma
+./instalar-birfree monitor    # o monitor do sistema (widget do Plasma)
+./instalar-birfree icones     # Birfree Icons
+./instalar-birfree terminal   # Terminal Birfree
+./instalar-birfree dock monitor   # várias de uma vez
+./instalar-birfree lista      # o que está instalado e o que vem no arquivo
+```
+
+`./instalar-birfree remover vidro` (ou `dock`, `monitor`...) tira só aquela
+parte; o vidro volta para a aparência que o Plasma tinha antes.
+
 ## Atualizar
 
 ```sh
@@ -34,7 +51,8 @@ Funciona também para quem tem um dos testes antigos (1.0 teste 6.x): a Beta
 
 ## O que vem no arquivo
 
-Os pacotes `birfree`, `birfree-icons` e `birfree-terminal`, os instaladores,
+Os pacotes `birfree` (a área de trabalho), `birfree-vidro`, `birfree-dock`,
+`birfree-sysmon`, `birfree-icons` e `birfree-terminal`, os instaladores,
 `VERSOES.txt` (versões e a pilha KDE/Qt usada na compilação), `SHA256SUMS` e
 os fontes em `fontes/Birfree-fontes.tar.gz` (GPL-3.0-or-later).
 
@@ -69,18 +87,32 @@ ou **Plasma** na lista de sessões.
 
 ## Monitor do sistema
 
-Vem na barra, ao lado da bandeja: CPU, temperatura, memória e bateria.
-Clique direito nele para escolher o que mostrar (também swap, GPU,
-temperatura da GPU, rede, disco e espaço) e para mover para a **dock** ou para
-a **área de trabalho**. Clique para abrir o Monitor do Sistema. Pelo terminal:
+Na barra e na dock, ao mesmo tempo, cada uma com as medidas, a ordem e o
+estilo dela (números, barrinhas ou anéis): CPU, temperatura, memória, swap,
+GPU (AMD, Intel e NVIDIA), temperatura e memória da GPU, rede, disco, espaço e
+bateria. O clique abre um painel com gráficos e os programas que mais pesam.
+Escolha em **Configurações › Birfree › Monitor do sistema** ou pelo terminal:
 
 ```sh
-birfree-sysmon dock              # muda de lugar: barra | dock | mesa | tirar
-birfree-sysmon mostrar cpu,ram   # o que aparece
+birfree-sysmon dock sim                      # também na dock
+birfree-sysmon mostrar barra cpu,gpu,ram     # o que aparece na barra
+birfree-sysmon estilo dock aneis             # numeros | barrinhas | aneis
 ```
 
 O mesmo widget funciona no Plasma: **Adicionar widgets › Monitor do sistema
 (Birfree)**, na área de trabalho ou num painel.
+
+## Personalizar a dock e a barra
+
+Clique direito na dock › **Personalizar a dock**: os ícones tremem, arraste
+para mudar a ordem, puxe para fora para tirar, solte apps do menu ou do
+Dolphin para fixar e pastas para virar pilha (também a lixeira). Lupa,
+esconder sozinha, indicadores, espaço e peças no mesmo painel.
+
+Clique direito na barra › **Personalizar a barra**: peças na esquerda, no
+centro e na direita, relógio (24 h, segundos, data), estilo (flutuante ou
+colada, cantos, vidro sólido ou transparente) e os ícones da bandeja que
+aparecem. As duas também em **Configurações › Birfree › Barra e dock**.
 
 ## Remover
 
@@ -90,6 +122,6 @@ Entre no Plasma e rode, na pasta do arquivo baixado:
 ./instalar-birfree --remover
 ```
 
-Tira os pacotes do Birfree, devolve a aparência do Plasma, desfaz a trava do
+Tira os pacotes do Birfree (todas as partes), devolve a aparência do Plasma, desfaz a trava do
 KDE/Qt no `pacman -Syu` e a tela de entrada anterior. Suas configurações em
 `~/.config/birfree*` ficam (apague à mão se quiser).

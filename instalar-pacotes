@@ -1,23 +1,44 @@
 #!/usr/bin/env bash
-# Instala/atualiza a DE com os pacotes prontos, do projeto ou do arquivo portátil.
+# Instala/atualiza pacotes do Birfree a partir do arquivo extraído (ou do
+# projeto). Sem nomes: todos (a área de trabalho completa). Chamado pelo
+# instalar-birfree, que traduz as partes (vidro, dock...) em pacotes.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 [[ $EUID -ne 0 ]] || { echo 'Execute como usuário normal.' >&2; exit 1; }
-case "${1:-}" in
-  --help|-h)
-    printf '%s\n' './instalar-pacotes            instala ou atualiza o Birfree deste projeto' \
-      './instalar-pacotes --mostrar  mostra os pacotes sem instalar' \
-      'Não recompila. Rode como usuário normal; o pacman pede sudo e confirmação.'
-    exit 0 ;;
-  ''|--mostrar) ;;
-  *) printf 'Opção desconhecida: %s\n' "$1" >&2; exit 1 ;;
-esac
+TODOS=(birfree-icons birfree birfree-vidro birfree-dock birfree-sysmon birfree-terminal)
+mostrar=""
+pedidos=()
+for arg in "$@"; do
+  case "$arg" in
+    --help|-h)
+      printf '%s\n' './instalar-pacotes [--mostrar] [pacote...]' \
+        'Sem pacote: todos. Não recompila; o pacman pede sudo e confirmação.'
+      exit 0 ;;
+    --mostrar) mostrar=1 ;;
+    birfree|birfree-*) pedidos+=("$arg") ;;
+    *) printf 'Opção desconhecida: %s\n' "$arg" >&2; exit 1 ;;
+  esac
+done
+((${#pedidos[@]})) || pedidos=("${TODOS[@]}")
+# Com o Birfree completo instalado, uma parte sozinha numa versão diferente
+# brigaria com ele: atualiza tudo junto
+if pacman -Q birfree >/dev/null 2>&1 && [[ " ${pedidos[*]} " != *" birfree "* ]]; then
+  printf 'O Birfree completo está instalado: as partes vão junto com ele, na mesma versão.\n'
+  pedidos=("${TODOS[@]}")
+fi
+# O birfree puxa as três partes dele
+if [[ " ${pedidos[*]} " == *" birfree "* ]]; then
+  for p in birfree-vidro birfree-dock birfree-sysmon; do
+    [[ " ${pedidos[*]} " == *" $p "* ]] || pedidos+=("$p")
+  done
+fi
+
 pacotes=()
 if [[ -d "$ROOT/pacotes" ]]; then
   [[ -f "$ROOT/SHA256SUMS" ]] || { printf 'Falta SHA256SUMS no arquivo extraído.\n' >&2; exit 1; }
   ( cd "$ROOT" && sha256sum --check --status SHA256SUMS ) \
     || { printf 'A verificação dos arquivos falhou. Extraia novamente ou transfira outra cópia.\n' >&2; exit 1; }
-  for nome in birfree-icons birfree birfree-terminal; do
+  for nome in "${pedidos[@]}"; do
     arquivos=("$ROOT/pacotes/$nome"-[0-9]*.pkg.tar.zst)
     [[ ${#arquivos[@]} -eq 1 && -f "${arquivos[0]}" ]] \
       || { printf 'Esperava um pacote de %s no arquivo extraído.\n' "$nome" >&2; exit 1; }
@@ -28,23 +49,28 @@ else
     echo 'Baixe e extraia o arquivo .tar.gz completo da Release; faltam os pacotes.' >&2
     exit 1
   }
-  selecionados="$(python3 "$ROOT/scripts/indexed-packages.py" "$ROOT/vendor/repo" birfree-icons birfree birfree-terminal)"
+  selecionados="$(python3 "$ROOT/scripts/indexed-packages.py" "$ROOT/vendor/repo" "${pedidos[@]}")"
   while IFS= read -r arquivo; do
     [[ -f "$arquivo" ]] && pacotes+=("$arquivo")
   done <<< "$selecionados"
 fi
-if [[ ${#pacotes[@]} -ne 3 ]]; then
-  printf '%s\n' 'Faltam os pacotes. Gere-os com ./neo/packaging/build-birfree.sh' >&2
+if [[ ${#pacotes[@]} -ne ${#pedidos[@]} ]]; then
+  printf '%s\n' 'Faltam pacotes no arquivo.' >&2
   exit 1
 fi
-printf '\nBirfree — atualizar a área de trabalho\n\n'
 command -v pacman >/dev/null \
   || { printf 'Este instalador requer Arch Linux ou sistema compatível com pacman.\n' >&2; exit 1; }
 for arquivo in "${pacotes[@]}"; do
   pacman -Qp "$arquivo"
 done
-[[ "${1:-}" != --mostrar ]] || exit 0
-# Plugins C++ precisam da mesma ABI de KWin/Qt usada na compilação.
+[[ -z "$mostrar" ]] || exit 0
+
+# Só os ícones não dependem da versão do KDE/Qt; o resto tem plugins C++/QML
+# compilados contra a pilha anotada no VERSOES.txt
+precisa_pilha=""
+for nome in "${pedidos[@]}"; do
+  [[ "$nome" == birfree-icons ]] || precisa_pilha=1
+done
 INCLUIR='Include = /etc/pacman.d/birfree-congelar.conf'
 pilha_ok() {
   local nome esperado atual
@@ -57,7 +83,7 @@ pilha_ok() {
     }
   done
 }
-if [[ -f "$ROOT/VERSOES.txt" ]] && ! pilha_ok; then
+if [[ -n "$precisa_pilha" && -f "$ROOT/VERSOES.txt" ]] && ! pilha_ok; then
   # O KDE/Qt fica congelado no -Syu; este Birfree foi compilado contra outro.
   # Atualiza o sistema inteiro uma vez sem o congelamento e confere de novo.
   printf '\nEste Birfree foi compilado contra outro KDE/Qt. O pacman vai atualizar o\nsistema inteiro uma vez, sem o congelamento, e pedir confirmação.\n'
@@ -88,17 +114,31 @@ if ((${#novos[@]} > 0)); then
 else
   printf '\nNada novo para instalar.\n'
 fi
-# Congela o KDE/Qt no -Syu (uma linha na seção [options] do pacman.conf)
-if ! grep -qxF "$INCLUIR" /etc/pacman.conf; then
-  sudo sed -i "/^\[options\]/a $INCLUIR" /etc/pacman.conf
-  printf '\nO pacman -Syu agora não atualiza o KDE nem o Qt (ver /etc/pacman.d/birfree-congelar.conf).\n'
+# Congela o KDE/Qt no -Syu (uma linha na seção [options] do pacman.conf).
+# O arquivo é do pacote birfree; só com partes (vidro, dock, monitor), a
+# mesma lista vai para um arquivo à parte, que nenhum pacote possui
+INCLUIR_PARTES='Include = /etc/pacman.d/birfree-congelar-partes.conf'
+if [[ -n "$precisa_pilha" ]]; then
+  if [[ -f /etc/pacman.d/birfree-congelar.conf ]]; then
+    linha=$INCLUIR
+  else
+    linha=$INCLUIR_PARTES
+    completo=("$ROOT"/pacotes/birfree-[0-9]*.pkg.tar.zst)
+    if [[ -f "${completo[0]}" ]]; then
+      bsdtar -xOf "${completo[0]}" etc/pacman.d/birfree-congelar.conf \
+        | sudo tee /etc/pacman.d/birfree-congelar-partes.conf >/dev/null
+    fi
+  fi
+  if [[ -s "${linha#Include = }" ]] && ! grep -qxF "$linha" /etc/pacman.conf; then
+    sudo sed -i "/^\[options\]/a $linha" /etc/pacman.conf
+    printf '\nO pacman -Syu agora não atualiza o KDE nem o Qt (ver %s).\n' "${linha#Include = }"
+  fi
 fi
 # Um /etc/sddm.conf antigo (de antes do Birfree, ex.: Current=breeze) manda
 # por cima da tela de entrada do Birfree; a escolha de propósito fica em
 # /etc/sddm.conf.d/birfree.conf (instalar.sh --sem-sddm) e é respeitada
-if [[ ! -e /etc/sddm.conf.d/birfree.conf ]] && grep -qsE '^[[:space:]]*Current=' /etc/sddm.conf \
+if [[ " ${pedidos[*]} " == *" birfree "* ]] && [[ ! -e /etc/sddm.conf.d/birfree.conf ]] && grep -qsE '^[[:space:]]*Current=' /etc/sddm.conf \
    && ! grep -qsE '^[[:space:]]*Current=birfree[[:space:]]*$' /etc/sddm.conf; then
   sudo sed -i -E 's/^([[:space:]]*Current=.*)$/# Birfree: tela de entrada do Birfree no lugar de\n# \1/' /etc/sddm.conf
   printf '\nA tela de entrada (SDDM) agora é a do Birfree (o tema antigo de /etc/sddm.conf foi comentado).\n'
 fi
-printf '\nAtualização concluída. Salve seu trabalho, saia da sessão e entre novamente em Birfree.\n'

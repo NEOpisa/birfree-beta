@@ -1,12 +1,15 @@
 Birfree Beta 0.6.6 (Terminal Birfree em Rust; troca de dispositivo no som)
-Patch (devs): 0.6.6-p6 — monitor do sistema na barra/dock/área de trabalho, Birfree ao lado do Plasma, --remover (sobre o p5)
+Patch (devs): 0.6.6-p7 — dock e barra personalizáveis, monitor na barra e na dock, instalador em partes (sobre o p6)
 Base de execução: KDE/Qt do sistema travado em 01/10; forks ainda em desenvolvimento.
-Commit dos fontes: ca2f58e656d666b5691efd7abf0d7e0d28cb75a3
+Commit dos fontes: b42d3b1a6a1c13b2430d39c42f502fdf58ce112e
 Terminal Birfree: em Rust, na pasta birfree-terminal do mesmo commit
 
 birfree-icons 1.0.0.r33.gc7db965e-1
-birfree 1:0.6.6.r235.gca2f58e6-1
-birfree-terminal 1:0.6.6.r11.gc167ed4c-1
+birfree 1:0.6.6.r240.gb42d3b1a-1
+birfree-terminal 1:0.6.6.r12.g0dc7e167-1
+birfree-vidro 1:0.6.6.r240.gb42d3b1a-1
+birfree-dock 1:0.6.6.r240.gb42d3b1a-1
+birfree-sysmon 1:0.6.6.r240.gb42d3b1a-1
 
 installed = kcoreaddons-6.30.0-1-x86_64
 installed = kscreen-6.7.5-1-x86_64
