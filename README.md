@@ -16,7 +16,7 @@ computer.
 **Current version: 0.6.6**, still incomplete. 1.0 ships when there are no
 known bugs left.
 
-![Birfree with Birfree Terminal and Dolphin](imagens/birfree.jpg)
+![Birfree with Birfree Terminal and Dolphin](imagens/birfree-neovanguard.jpg)
 
 ## What makes it different
 
@@ -26,9 +26,9 @@ Change the wallpaper and the accent color changes with it, picked from the
 image: the bar, the dock, the window glass, folder icons and widgets. No
 settings to open.
 
-![The system color changing with each wallpaper](imagens/troca-de-tema.gif)
+![The system color changing with each wallpaper](imagens/troca-de-tema-neovanguard.gif)
 
-![Six wallpapers, six themes](imagens/temas.jpg)
+![Six wallpapers, six themes](imagens/temas-neovanguard.jpg)
 
 ### Birfrost glass
 
@@ -47,7 +47,7 @@ Plasma (`./instalar-birfree vidro`).
 Magnifier (soft or large), dot or bar indicators, auto-hide, folder stacks
 and the trash, all by dragging:
 
-![Soft magnifier on the dock](imagens/dock-lupa.png)
+![Soft magnifier on the dock](imagens/dock-lupa-suave.png)
 
 ### And more
 

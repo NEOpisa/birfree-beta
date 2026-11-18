@@ -15,7 +15,7 @@ O Birfree é a área de trabalho da Neovanguard, **pensada para o
 **Versão atual: 0.6.6**, ainda incompleta. A 1.0 sai quando não houver
 defeito conhecido.
 
-![Birfree com o Terminal Birfree e o Dolphin](imagens/birfree.jpg)
+![Birfree com o Terminal Birfree e o Dolphin](imagens/birfree-neovanguard.jpg)
 
 ## O que ele tem de diferente
 
@@ -25,9 +25,9 @@ Troque o papel de parede e a cor de destaque muda junto, tirada da imagem: a
 barra, a dock, o vidro das janelas, os ícones das pastas e os widgets. Sem
 abrir configuração nenhuma.
 
-![A cor do sistema mudando com cada papel de parede](imagens/troca-de-tema.gif)
+![A cor do sistema mudando com cada papel de parede](imagens/troca-de-tema-neovanguard.gif)
 
-![Seis papéis de parede, seis temas](imagens/temas.jpg)
+![Seis papéis de parede, seis temas](imagens/temas-neovanguard.jpg)
 
 ### Vidro Birfrost
 
@@ -46,7 +46,7 @@ GTK feitos para o Birfree. Também dá para usar só o vidro no KDE Plasma
 Lupa (suave ou grande), indicadores em pontos ou em barra, esconder sozinha,
 pilhas de pastas e a lixeira, tudo arrastando:
 
-![Lupa grande na dock](imagens/dock-lupa.png)
+![Lupa grande na dock](imagens/dock-lupa-suave.png)
 
 ### E mais
 
