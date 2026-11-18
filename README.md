@@ -1,66 +1,69 @@
 # Birfree Beta
 
+**English** · [Português](README.pt-BR.md)
+
 > [!WARNING]
-> **Isto é um beta.** O Birfree ainda está em desenvolvimento e pode ter
-> defeitos, inclusive na entrada da sessão. **Instale por sua conta e risco**:
-> faça backup do que importa antes e tenha como voltar ao Plasma (veja
-> [Remover](#remover)).
+> **This is a beta.** Birfree is still in development and may have bugs,
+> including at session login. **Install at your own risk**: back up what
+> matters first and make sure you can go back to Plasma (see
+> [Uninstall](#uninstall)).
 
-O Birfree é a área de trabalho da Neovanguard, **pensada para o
-[Neovanguard OS](https://nvgsec.com)** (em breve). Este beta roda em Arch Linux x86_64
-(Wayland), com pacotes prontos: nada é compilado no seu computador.
+Birfree is the Neovanguard desktop, **designed for
+[Neovanguard OS](https://nvgsec.com)** (coming soon). This beta runs on Arch
+Linux x86_64 (Wayland) with ready-made packages: nothing is compiled on your
+computer.
 
-**Versão atual: 0.6.6**, ainda incompleta. A 1.0 sai quando não houver
-defeito conhecido.
+**Current version: 0.6.6**, still incomplete. 1.0 ships when there are no
+known bugs left.
 
-![Birfree com o Terminal Birfree e o Dolphin](imagens/birfree.jpg)
+![Birfree with Birfree Terminal and Dolphin](imagens/birfree.jpg)
 
-## O que ele tem de diferente
+## What makes it different
 
-### O tema segue o papel de parede
+### The theme follows your wallpaper
 
-Troque o papel de parede e a cor de destaque muda junto, tirada da imagem: a
-barra, a dock, o vidro das janelas, os ícones das pastas e os widgets. Sem
-abrir configuração nenhuma.
+Change the wallpaper and the accent color changes with it, picked from the
+image: the bar, the dock, the window glass, folder icons and widgets. No
+settings to open.
 
-![A cor do sistema mudando com cada papel de parede](imagens/troca-de-tema.gif)
+![The system color changing with each wallpaper](imagens/troca-de-tema.gif)
 
-![Seis papéis de parede, seis temas](imagens/temas.jpg)
+![Six wallpapers, six themes](imagens/temas.jpg)
 
-### Vidro Birfrost
+### Birfrost glass
 
-Barra, dock, menus e janelas num vidro próprio, com moldura, estilo Qt e tema
-GTK feitos para o Birfree. Também dá para usar só o vidro no KDE Plasma
-(`./instalar-birfree vidro`).
+Bar, dock, menus and windows in their own glass, with a window frame, Qt
+style and GTK theme made for Birfree. You can also use just the glass on KDE
+Plasma (`./instalar-birfree vidro`).
 
-### A dock do seu jeito
+### Your dock, your way
 
-| Flutuante | Integrada (uma barra só) |
+| Floating | Integrated (a single bar) |
 |---|---|
-| ![Dock flutuante](imagens/dock-flutuante.jpg) | ![Dock integrada](imagens/dock-integrada.jpg) |
-| **Na lateral** | **Personalizar a dock** |
-| ![Dock na lateral](imagens/dock-lateral.jpg) | ![Painel Personalizar a dock](imagens/personalizar-dock.jpg) |
+| ![Floating dock](imagens/dock-flutuante.jpg) | ![Integrated dock](imagens/dock-integrada.jpg) |
+| **On the side** | **Customize the dock** |
+| ![Dock on the side](imagens/dock-lateral.jpg) | ![Customize the dock panel](imagens/personalizar-dock.jpg) |
 
-Lupa (suave ou grande), indicadores em pontos ou em barra, esconder sozinha,
-pilhas de pastas e a lixeira, tudo arrastando:
+Magnifier (soft or large), dot or bar indicators, auto-hide, folder stacks
+and the trash, all by dragging:
 
-![Lupa grande na dock](imagens/dock-lupa.png)
+![Soft magnifier on the dock](imagens/dock-lupa.png)
 
-### E mais
+### And more
 
-| Menu de aplicativos | Central de controle |
+| App menu | Control center |
 |---|---|
-| ![Menu](imagens/menu.jpg) | ![Central de controle](imagens/central.jpg) |
-| **Monitor do sistema** | **Visão geral (Meta+W)** |
-| ![Monitor do sistema](imagens/monitor.jpg) | ![Visão geral das janelas](imagens/visao-geral.jpg) |
+| ![Menu](imagens/menu.jpg) | ![Control center](imagens/central.jpg) |
+| **System monitor** | **Overview (Meta+W)** |
+| ![System monitor](imagens/monitor.jpg) | ![Window overview](imagens/visao-geral.jpg) |
 
-Seletor de papel de parede com Meta+Shift+clique na área de trabalho:
+Wallpaper picker with Meta+Shift+click on the desktop:
 
-![Seletor de papel de parede](imagens/papel-de-parede.jpg)
+![Wallpaper picker](imagens/papel-de-parede.jpg)
 
-## Instalar
+## Install
 
-Baixe a Release mais nova, confira e instale:
+Download the latest Release, verify it and install:
 
 ```sh
 curl -fLO https://github.com/NEOpisa/birfree-beta/releases/latest/download/Birfree-Beta-x86_64.tar.gz
@@ -71,26 +74,26 @@ cd Birfree-Beta-x86_64
 ./instalar-birfree
 ```
 
-Depois, saia da sessão e entre em **Birfree**.
+Then log out and log in to **Birfree**.
 
-### Só uma parte (também no KDE Plasma comum)
+### Just one part (also on regular KDE Plasma)
 
-O mesmo instalador traz peças avulsas, sem a área de trabalho inteira:
+The same installer ships standalone pieces, without the whole desktop:
 
 ```sh
-./instalar-birfree vidro      # o vidro Birfrost no Plasma: moldura, estilo, cores, cursor e GTK
-./instalar-birfree dock       # a dock do Birfree dentro do Plasma
-./instalar-birfree monitor    # o monitor do sistema (widget do Plasma)
+./instalar-birfree vidro      # Birfrost glass on Plasma: frame, style, colors, cursor and GTK
+./instalar-birfree dock       # the Birfree dock inside Plasma
+./instalar-birfree monitor    # the system monitor (Plasma widget)
 ./instalar-birfree icones     # Birfree Icons
-./instalar-birfree terminal   # Terminal Birfree
-./instalar-birfree dock monitor   # várias de uma vez
-./instalar-birfree lista      # o que está instalado e o que vem no arquivo
+./instalar-birfree terminal   # Birfree Terminal
+./instalar-birfree dock monitor   # several at once
+./instalar-birfree lista      # what is installed and what the archive contains
 ```
 
-`./instalar-birfree remover vidro` (ou `dock`, `monitor`...) tira só aquela
-parte; o vidro volta para a aparência que o Plasma tinha antes.
+`./instalar-birfree remover vidro` (or `dock`, `monitor`...) removes only that
+part; the glass goes back to the look Plasma had before.
 
-## Atualizar
+## Update
 
 ```sh
 curl -fLO https://raw.githubusercontent.com/NEOpisa/birfree-beta/main/atualizar-birfree
@@ -98,91 +101,90 @@ chmod +x atualizar-birfree
 ./atualizar-birfree
 ```
 
-Funciona também para quem tem um dos testes antigos (1.0 teste 6.x): a Beta
-0.5 entra por cima deles.
+It also works if you have one of the old tests (1.0 test 6.x): the beta
+installs over them.
 
-## O que vem no arquivo
+## What is in the archive
 
-Os pacotes `birfree` (a área de trabalho), `birfree-vidro`, `birfree-dock`,
-`birfree-sysmon`, `birfree-icons` e `birfree-terminal`, os instaladores,
-`VERSOES.txt` (versões e a pilha KDE/Qt usada na compilação), `SHA256SUMS` e
-os fontes em `fontes/Birfree-fontes.tar.gz` (GPL-3.0-or-later).
+The packages `birfree` (the desktop), `birfree-vidro`, `birfree-dock`,
+`birfree-sysmon`, `birfree-icons` and `birfree-terminal`, the installers,
+`VERSOES.txt` (versions and the KDE/Qt stack used to build), `SHA256SUMS` and
+the sources in `fontes/Birfree-fontes.tar.gz` (GPL-3.0-or-later).
 
-O instalador confere a integridade e a versão do KWin/Qt; se o sistema estiver
-em outra, ele atualiza o sistema uma vez antes. O `pacman -Syu` depois disso
-não atualiza o KDE nem o Qt (`/etc/pacman.d/birfree-congelar.conf`).
+The installer checks integrity and the KWin/Qt version; if your system is on
+a different one, it updates the system once first. After that, `pacman -Syu`
+does not update KDE or Qt (`/etc/pacman.d/birfree-congelar.conf`).
 
-## Requisitos
+## Requirements
 
-- Arch Linux x86_64 (ou derivado com pacman), com sudo.
-- Placa de vídeo com Wayland funcionando (o Birfree é só Wayland; apps X11
-  abrem pelo XWayland).
-- SDDM como tela de entrada (o instalador põe o tema do Birfree nela).
+- Arch Linux x86_64 (or a pacman-based derivative), with sudo.
+- A graphics card with working Wayland (Birfree is Wayland only; X11 apps run
+  through XWayland).
+- SDDM as the login screen (the installer applies the Birfree theme to it).
 
-## Birfree e KDE Plasma lado a lado
+## Birfree and KDE Plasma side by side
 
-Pode ter os dois. O `./instalar-birfree` sem opção instala o Birfree por cima
-do que já existe e não tira o Plasma: na tela de entrada, escolha **Birfree**
-ou **Plasma** na lista de sessões.
+You can have both. `./instalar-birfree` with no option installs Birfree on top
+of what you have and keeps Plasma: on the login screen, pick **Birfree** or
+**Plasma** from the session list.
 
-- O Birfree usa peças do KDE (KWin, Configurações do Sistema, Dolphin...);
-  elas continuam servindo ao Plasma.
-- A aparência do Birfree (decoração, ícones, cursor, tema GTK, cores) vale só
-  na sessão Birfree. Ao entrar no Plasma, ele volta com a aparência que tinha;
-  o que você mudar dentro do Plasma fica.
-- Ficam valendo nos dois: o tema da tela de entrada (SDDM), o modo escuro dos
-  navegadores (Firefox com Dark Reader, Chrome/Chromium/Brave escuros) e a
-  trava do KDE/Qt no `pacman -Syu` (o Plasma fica na mesma versão do KDE que
-  o Birfree usa).
-- `./instalar-birfree --migrar` é outra coisa: deixa a máquina **só** com o
-  Birfree e tira o Plasma (`--desfazer` traz de volta).
+- Birfree uses KDE pieces (KWin, System Settings, Dolphin...); they keep
+  working for Plasma.
+- The Birfree look (decoration, icons, cursor, GTK theme, colors) applies only
+  in the Birfree session. When you log in to Plasma it comes back with the look
+  it had; whatever you change inside Plasma stays.
+- These apply to both: the login screen theme (SDDM), dark mode in browsers
+  (Firefox with Dark Reader, dark Chrome/Chromium/Brave) and the KDE/Qt lock on
+  `pacman -Syu` (Plasma stays on the same KDE version Birfree uses).
+- `./instalar-birfree --migrar` is different: it leaves the machine with
+  **only** Birfree and removes Plasma (`--desfazer` brings it back).
 
-## Monitor do sistema
+## System monitor
 
-Na barra e na dock, ao mesmo tempo, cada uma com as medidas, a ordem e o
-estilo dela (números, barrinhas ou anéis): CPU, temperatura, memória, swap,
-GPU (AMD, Intel e NVIDIA), temperatura e memória da GPU, rede, disco, espaço e
-bateria. O clique abre um painel com gráficos e os programas que mais pesam.
-Escolha em **Configurações › Birfree › Monitor do sistema** ou pelo terminal:
+On the bar and on the dock at the same time, each with its own measures, order
+and style (numbers, bars or rings): CPU, temperature, memory, swap, GPU (AMD,
+Intel and NVIDIA), GPU temperature and memory, network, disk, space and
+battery. Clicking opens a panel with graphs and the heaviest programs. Choose
+in **Settings › Birfree › System monitor** or from the terminal:
 
 ```sh
-birfree-sysmon dock sim                      # também na dock
-birfree-sysmon mostrar barra cpu,gpu,ram     # o que aparece na barra
+birfree-sysmon dock sim                      # also on the dock
+birfree-sysmon mostrar barra cpu,gpu,ram     # what shows on the bar
 birfree-sysmon estilo dock aneis             # numeros | barrinhas | aneis
 ```
 
-O mesmo widget funciona no Plasma: **Adicionar widgets › Monitor do sistema
-(Birfree)**, na área de trabalho ou num painel.
+The same widget works on Plasma: **Add widgets › System monitor (Birfree)**,
+on the desktop or in a panel.
 
-## Personalizar a dock e a barra
+## Customize the dock and the bar
 
-Clique direito na dock › **Personalizar a dock**: os ícones tremem, arraste
-para mudar a ordem, puxe para fora para tirar, solte apps do menu ou do
-Dolphin para fixar e pastas para virar pilha (também a lixeira). Lupa,
-esconder sozinha, indicadores, espaço e peças no mesmo painel.
+Right-click the dock › **Customize the dock**: the icons wiggle; drag to
+reorder, pull out to remove, drop apps from the menu or Dolphin to pin them
+and folders to make stacks (the trash too). Magnifier, auto-hide, indicators,
+spacing and pieces in the same panel.
 
-Clique direito na barra › **Personalizar a barra**: peças na esquerda, no
-centro e na direita, relógio (24 h, segundos, data), estilo (flutuante ou
-colada, cantos, vidro sólido ou transparente) e os ícones da bandeja que
-aparecem. As duas também em **Configurações › Birfree › Barra e dock**.
+Right-click the bar › **Customize the bar**: pieces on the left, center and
+right, clock (24 h, seconds, date), style (floating or attached, corners,
+solid or transparent glass) and which tray icons show. Both also in
+**Settings › Birfree › Bar and dock**.
 
-## Remover
+## Uninstall
 
-Entre no Plasma e rode, na pasta do arquivo baixado:
+Log in to Plasma and run, in the folder of the downloaded archive:
 
 ```sh
 ./instalar-birfree --remover
 ```
 
-Tira os pacotes do Birfree (todas as partes), devolve a aparência do Plasma, desfaz a trava do
-KDE/Qt no `pacman -Syu` e a tela de entrada anterior. Suas configurações em
-`~/.config/birfree*` ficam (apague à mão se quiser).
+It removes the Birfree packages (all parts), restores the Plasma look, undoes
+the KDE/Qt lock on `pacman -Syu` and the previous login screen. Your settings
+in `~/.config/birfree*` stay (delete them by hand if you want).
 
-## Como o Birfree é feito
+## How Birfree is made
 
-Usamos inteligência artificial para auditar o código, escrever a
-documentação e trazer insights sobre o código.
+We use artificial intelligence to audit the code, write the documentation and
+provide code insights.
 
-Os papéis de parede das fotos vêm com o Birfree (Pepper&Carrot, telescópio
-James Webb e fotos do Brasil); os créditos de cada um ficam em
-`/usr/share/birfree/wallpapers/CREDITOS.md` depois de instalar.
+The wallpapers in the screenshots ship with Birfree (Pepper&Carrot, the James
+Webb telescope and photos of Brazil); the credits for each one are in
+`/usr/share/birfree/wallpapers/CREDITOS.md` after installing.
