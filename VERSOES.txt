@@ -1,15 +1,15 @@
 Birfree Beta 0.6.6 (Terminal Birfree em Rust; troca de dispositivo no som)
-Patch (devs): 0.6.6-p10 — cores: troca pela cor do meio, prévia, seletor com roda/hex e famílias, Cornflower de fábrica, contraste automático, accent no cursor/bloqueio/SDDM/terminal (último patch da 0.6.6, sobre o p9)
+Patch (devs): 0.6.6-p11 — animações sem engasgo (painéis da shell fora do efeito de janelas), troca de cor que não para no meio, cor de papéis suaves, só as animações do Birfree (Wobbly do KDE ao arrastar) e mais Rust por dentro (último patch da 0.6.6, sobre o p10)
 Base de execução: KDE/Qt do sistema travado em 01/10; forks ainda em desenvolvimento.
-Commit dos fontes: 3172f0b25033123c9a4bfd71d3e2509bbddb6da4
+Commit dos fontes: 3597b72046d56b7ff54d5afc15b5c89781160f75
 Terminal Birfree: em Rust, na pasta birfree-terminal do mesmo commit
 
-birfree-icons 1.0.0.r37.g798546a6-1
-birfree 1:0.6.6.r278.g3172f0b2-1
+birfree-icons 1.0.0.r39.g2359a45d-1
+birfree 1:0.6.6.r296.g3597b720-1
 birfree-terminal 1:0.6.6.r15.g3172f0b2-1
-birfree-vidro 1:0.6.6.r278.g3172f0b2-1
-birfree-dock 1:0.6.6.r278.g3172f0b2-1
-birfree-sysmon 1:0.6.6.r278.g3172f0b2-1
+birfree-vidro 1:0.6.6.r296.g3597b720-1
+birfree-dock 1:0.6.6.r296.g3597b720-1
+birfree-sysmon 1:0.6.6.r296.g3597b720-1
 
 installed = kcoreaddons-6.30.0-1-x86_64
 installed = kscreen-6.7.5-1-x86_64
