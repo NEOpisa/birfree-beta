@@ -9,7 +9,8 @@
 > [Uninstall](#uninstall)).
 
 Birfree is the Neovanguard desktop, **designed for
-[Neovanguard OS](https://nvgsec.com)** (coming soon). This beta runs on Arch
+[Neovanguard OS](https://nvgsec.com)** (coming soon). It is its own desktop,
+**independent from KDE Plasma**, with its own packages. This beta runs on Arch
 Linux x86_64 (Wayland) with ready-made packages: nothing is compiled on your
 computer. Being written in Rust (see
 [Built with Rust](#built-with-rust)).
@@ -123,20 +124,25 @@ does not update KDE or Qt (`/etc/pacman.d/birfree-congelar.conf`).
   through XWayland).
 - SDDM as the login screen (the installer applies the Birfree theme to it).
 
-## Birfree and KDE Plasma side by side
+## Independent from KDE Plasma
 
-You can have both. `./instalar-birfree` with no option installs Birfree on top
-of what you have and keeps Plasma: on the login screen, pick **Birfree** or
-**Plasma** from the session list.
+Birfree is its own desktop with its own packages (`birfree`, `birfree-vidro`,
+`birfree-dock`, `birfree-sysmon`, `birfree-icons`, `birfree-terminal`). It does
+not need Plasma, and having Plasma installed does not get in its way: on the
+login screen, pick **Birfree** or **Plasma** from the session list.
 
-- Birfree uses KDE pieces (KWin, System Settings, Dolphin...); they keep
-  working for Plasma.
+- **Leaving KDE one piece at a time.** Today Birfree still uses some KDE
+  pieces under the hood (KWin, System Settings, Dolphin...). Each one is
+  replaced by Birfree's own when its turn comes. Starting with 0.6.7, Birfree
+  ships its own build of the compositor, installed apart from the one Plasma
+  uses.
 - The Birfree look (decoration, icons, cursor, GTK theme, colors) applies only
   in the Birfree session. When you log in to Plasma it comes back with the look
   it had; whatever you change inside Plasma stays.
-- These apply to both: the login screen theme (SDDM), dark mode in browsers
-  (Firefox with Dark Reader, dark Chrome/Chromium/Brave) and the KDE/Qt lock on
-  `pacman -Syu` (Plasma stays on the same KDE version Birfree uses).
+- Still shared by both for now: the login screen theme (SDDM), dark mode in
+  browsers (Firefox with Dark Reader, dark Chrome/Chromium/Brave) and the
+  KDE/Qt lock on `pacman -Syu` (Plasma stays on the same KDE version Birfree
+  uses).
 - `./instalar-birfree --migrar` is different: it leaves the machine with
   **only** Birfree and removes Plasma (`--desfazer` brings it back).
 

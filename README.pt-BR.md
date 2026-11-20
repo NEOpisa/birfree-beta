@@ -9,7 +9,8 @@
 > [Remover](#remover)).
 
 O Birfree é a área de trabalho da Neovanguard, **pensada para o
-[Neovanguard OS](https://nvgsec.com)** (em breve). Este beta roda em Arch Linux x86_64
+[Neovanguard OS](https://nvgsec.com)** (em breve). É uma área de trabalho própria,
+**independente do KDE Plasma**, com pacotes próprios. Este beta roda em Arch Linux x86_64
 (Wayland), com pacotes prontos: nada é compilado no seu computador. Sendo feito em Rust (veja
 [Feito em Rust](#feito-em-rust)).
 
@@ -122,22 +123,27 @@ não atualiza o KDE nem o Qt (`/etc/pacman.d/birfree-congelar.conf`).
   abrem pelo XWayland).
 - SDDM como tela de entrada (o instalador põe o tema do Birfree nela).
 
-## Birfree e KDE Plasma lado a lado
+## Independente do KDE Plasma
 
-Pode ter os dois. O `./instalar-birfree` sem opção instala o Birfree por cima
-do que já existe e não tira o Plasma: na tela de entrada, escolha **Birfree**
-ou **Plasma** na lista de sessões.
+O Birfree é uma área de trabalho própria, com pacotes próprios (`birfree`,
+`birfree-vidro`, `birfree-dock`, `birfree-sysmon`, `birfree-icons`,
+`birfree-terminal`). Ele não precisa do Plasma, e ter o Plasma instalado não
+atrapalha: na tela de entrada, escolha **Birfree** ou **Plasma** na lista de
+sessões.
 
-- O Birfree usa peças do KDE (KWin, Configurações do Sistema, Dolphin...);
-  elas continuam servindo ao Plasma.
-- A aparência do Birfree (decoração, ícones, cursor, tema GTK, cores) vale só
+- **Saindo do KDE uma peça por vez.** Hoje o Birfree ainda usa algumas peças
+  do KDE por baixo (KWin, Configurações do Sistema, Dolphin...). Cada uma é
+  trocada por uma do próprio Birfree quando chegar a vez dela. A partir da
+  0.6.7, o Birfree traz a própria versão do compositor, instalada à parte da
+  que o Plasma usa.
+- A aparência do Birfree (moldura, ícones, cursor, tema GTK, cores) vale só
   na sessão Birfree. Ao entrar no Plasma, ele volta com a aparência que tinha;
   o que você mudar dentro do Plasma fica.
-- Ficam valendo nos dois: o tema da tela de entrada (SDDM), o modo escuro dos
-  navegadores (Firefox com Dark Reader, Chrome/Chromium/Brave escuros) e a
-  trava do KDE/Qt no `pacman -Syu` (o Plasma fica na mesma versão do KDE que
-  o Birfree usa).
-- `./instalar-birfree --migrar` é outra coisa: deixa a máquina **só** com o
+- Por enquanto valem para os dois: o tema da tela de entrada (SDDM), o modo
+  escuro nos navegadores (Firefox com Dark Reader, Chrome/Chromium/Brave
+  escuros) e a trava do KDE/Qt no `pacman -Syu` (o Plasma fica na mesma versão
+  do KDE que o Birfree usa).
+- `./instalar-birfree --migrar` é diferente: deixa a máquina **só** com o
   Birfree e tira o Plasma (`--desfazer` traz de volta).
 
 ## Monitor do sistema
