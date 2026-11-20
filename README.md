@@ -15,7 +15,7 @@ Linux x86_64 (Wayland) with ready-made packages: nothing is compiled on your
 computer. Being written in Rust (see
 [Built with Rust](#built-with-rust)).
 
-**Current version: 0.6.6**, still incomplete. 1.0 ships when there are no
+**Current version: Birfree 0.6 Beta**, still incomplete. 1.0 ships when there are no
 known bugs left.
 
 ![Birfree with Birfree Terminal and Dolphin](imagens/birfree-neovanguard.jpg)
@@ -76,7 +76,20 @@ cd Birfree-Beta-x86_64
 ./instalar-birfree
 ```
 
-Then log out and log in to **Birfree**.
+Then log out and log in to **Birfree**. **Birup** (menu › Birup) comes
+along: the next versions arrive through it.
+
+### Just Birup
+
+Birup installs and updates Birfree and the Neovanguard apps, and updates
+itself. To install only Birup, without downloading Birfree, and choose from
+its window:
+
+```sh
+curl -fsSL https://github.com/NEOpisa/birfree-beta/releases/latest/download/instalar-birup | bash
+```
+
+It only installs what carries the Birfree signature.
 
 ### Just one part (also on regular KDE Plasma)
 
@@ -97,19 +110,25 @@ part; the glass goes back to the look Plasma had before.
 
 ## Update
 
+From **0.6 Beta (0.6.7.0)** on, through **Birup**: it tells you when a new
+version is out (at login and every 6 hours) and updates with one click.
+
+On an older version, which does not have Birup yet, the usual command (it
+brings Birup along):
+
 ```sh
 curl -fLO https://raw.githubusercontent.com/NEOpisa/birfree-beta/main/atualizar-birfree
 chmod +x atualizar-birfree
 ./atualizar-birfree
 ```
 
-It also works if you have one of the old tests (1.0 test 6.x): the beta
-installs over them.
+It also works if you have one of the old tests (1.0 test 6.x).
 
 ## What is in the archive
 
-The packages `birfree` (the desktop), `birfree-vidro`, `birfree-dock`,
-`birfree-sysmon`, `birfree-icons` and `birfree-terminal`, the installers,
+The packages `birfree` (the desktop), `birfree-compositor` (Birfree's
+compositor), `birfree-vidro`, `birfree-dock`, `birfree-sysmon`, `birfree-icons`
+and `birfree-terminal`, Birup, the installers,
 `VERSOES.txt` (versions and the KDE/Qt stack used to build), `SHA256SUMS` and
 the sources in `fontes/Birfree-fontes.tar.gz` (GPL-3.0-or-later).
 

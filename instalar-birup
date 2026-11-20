@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# Instala só o Birup, sem baixar o Birfree. Depois, é pelo Birup que se
+# instala e atualiza o Birfree (e ele mesmo se atualiza).
+#
+#   curl -fsSL https://github.com/NEOpisa/birfree-beta/releases/latest/download/instalar-birup | bash
+#
+# Confere o binário pelo SHA256SUMS-birup da release e, com o minisign
+# instalado, essa lista pela assinatura do Birfree. Por último o próprio Birup confere
+# a si mesmo pela assinatura (ele traz a chave dentro).
+set -euo pipefail
+REPO=NEOpisa/birfree-beta
+[[ $EUID -ne 0 ]] || { echo 'Execute como usuário normal.' >&2; exit 1; }
+for cmd in curl sha256sum; do
+    command -v "$cmd" >/dev/null || { echo "Falta o comando: $cmd" >&2; exit 1; }
+done
+pasta=$(mktemp -d "${TMPDIR:-/tmp}/birup.XXXXXX")
+trap 'rm -rf "$pasta"' EXIT
+cd "$pasta"
+base="https://github.com/$REPO/releases/latest/download"
+echo 'Baixando o Birup…'
+curl -fL --progress-bar -O "$base/birup"
+curl -fsSL -O "$base/SHA256SUMS-birup"
+curl -fsSL -O "$base/SHA256SUMS-birup.minisig"
+grep -E '^[0-9a-f]{64}[[:space:]]+\*?birup$' SHA256SUMS-birup | sha256sum --check --status \
+    || { echo 'O Birup baixado não confere com o SHA256SUMS-birup da release.' >&2; exit 1; }
+if command -v minisign >/dev/null; then
+    cat > birfree.pub <<'CHAVE'
+untrusted comment: minisign public key: 83A26F098A9E06E5
+RWTlBp6KCW+igyP9AzvDQ3MIvq5m9nROwbOH4sih+P8LgkQ9pUCldhDi
+CHAVE
+    minisign -Vqm SHA256SUMS-birup -p birfree.pub \
+        || { echo 'O SHA256SUMS-birup não tem a assinatura do Birfree.' >&2; exit 1; }
+fi
+chmod 755 birup
+./birup --conferir-se
+./birup --instalar-se
+echo 'Abra pelo menu (Birup) para instalar o Birfree.'

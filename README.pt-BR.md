@@ -14,7 +14,7 @@ O Birfree é a área de trabalho da Neovanguard, **pensada para o
 (Wayland), com pacotes prontos: nada é compilado no seu computador. Sendo feito em Rust (veja
 [Feito em Rust](#feito-em-rust)).
 
-**Versão atual: 0.6.6**, ainda incompleta. A 1.0 sai quando não houver
+**Versão atual: Birfree 0.6 Beta**, ainda incompleta. A 1.0 sai quando não houver
 defeito conhecido.
 
 ![Birfree com o Terminal Birfree e o Dolphin](imagens/birfree-neovanguard.jpg)
@@ -75,7 +75,19 @@ cd Birfree-Beta-x86_64
 ./instalar-birfree
 ```
 
-Depois, saia da sessão e entre em **Birfree**.
+Depois, saia da sessão e entre em **Birfree**. O **Birup** (menu › Birup)
+vem junto: é por ele que as próximas versões chegam.
+
+### Só o Birup
+
+O Birup instala e atualiza o Birfree e os apps da Neovanguard, e se atualiza
+sozinho. Para instalar só ele, sem baixar o Birfree, e escolher pela janela:
+
+```sh
+curl -fsSL https://github.com/NEOpisa/birfree-beta/releases/latest/download/instalar-birup | bash
+```
+
+Ele só instala o que tiver a assinatura do Birfree.
 
 ### Só uma parte (também no KDE Plasma comum)
 
@@ -96,19 +108,25 @@ parte; o vidro volta para a aparência que o Plasma tinha antes.
 
 ## Atualizar
 
+A partir da **0.6 Beta (0.6.7.0)**, pelo **Birup**: ele avisa quando sai
+versão nova (no login e a cada 6 horas) e atualiza com um clique.
+
+Numa versão anterior, que ainda não tem o Birup, o comando de sempre (ele já
+traz o Birup):
+
 ```sh
 curl -fLO https://raw.githubusercontent.com/NEOpisa/birfree-beta/main/atualizar-birfree
 chmod +x atualizar-birfree
 ./atualizar-birfree
 ```
 
-Funciona também para quem tem um dos testes antigos (1.0 teste 6.x): a Beta
-0.5 entra por cima deles.
+Funciona também para quem tem um dos testes antigos (1.0 teste 6.x).
 
 ## O que vem no arquivo
 
-Os pacotes `birfree` (a área de trabalho), `birfree-vidro`, `birfree-dock`,
-`birfree-sysmon`, `birfree-icons` e `birfree-terminal`, os instaladores,
+Os pacotes `birfree` (a área de trabalho), `birfree-compositor` (o compositor
+do Birfree), `birfree-vidro`, `birfree-dock`, `birfree-sysmon`, `birfree-icons`
+e `birfree-terminal`, o Birup, os instaladores,
 `VERSOES.txt` (versões e a pilha KDE/Qt usada na compilação), `SHA256SUMS` e
 os fontes em `fontes/Birfree-fontes.tar.gz` (GPL-3.0-or-later).
 

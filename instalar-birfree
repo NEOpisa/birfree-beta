@@ -8,6 +8,7 @@
 #   ./instalar-birfree monitor         só o monitor do sistema (widget do Plasma)
 #   ./instalar-birfree icones          só os Birfree Icons
 #   ./instalar-birfree terminal        só o Terminal Birfree
+#   ./instalar-birfree birup           só o Birup (instala e atualiza o Birfree)
 #   ./instalar-birfree dock monitor    várias partes de uma vez
 #   ./instalar-birfree lista           o que está instalado e o que vem no arquivo
 #   ./instalar-birfree remover [parte] tira tudo ou só uma parte
@@ -32,7 +33,7 @@ pacote_de() {
 }
 
 ajuda() {
-  sed -n '2,13p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '2,14p' "$0" | sed 's/^# \{0,1\}//'
   printf '%s\n' '' 'Também:' \
     '  ./instalar-birfree --mostrar    confere e lista os pacotes sem instalar' \
     '  ./instalar-birfree --atualizar  atualiza o que já está instalado' \
@@ -134,15 +135,35 @@ desligar_dock() {
   pkill -u "$EUID" -f -- 'birfree-shell --so-dock' 2>/dev/null || true
 }
 
+# ------------------------------------------------------------- birup --
+# O Birup (instala e atualiza o Birfree e os apps da Neovanguard) mora em
+# ~/.local/bin; a partir daqui, as atualizações chegam por ele
+instalar_birup() {
+  if [[ -x "$ROOT/birup" ]]; then
+    "$ROOT/birup" --instalar-se || printf 'O Birup não pôde ser instalado (o Birfree foi).\n' >&2
+  fi
+}
+remover_birup() {
+  systemctl --user disable --now birup-verificar.timer >/dev/null 2>&1 || true
+  rm -f "$CONFIG/systemd/user/birup-verificar.timer" "$CONFIG/systemd/user/birup-verificar.service" \
+        "$HOME/.local/bin/birup" "${XDG_DATA_HOME:-$HOME/.local/share}/applications/birup.desktop" \
+        "$HOME/.local/share/applications/birup.desktop"
+  systemctl --user daemon-reload >/dev/null 2>&1 || true
+}
+
 # -------------------------------------------------------- instalação --
 instalar() {
   local partes=("$@") pacotes=() p
   for p in "${partes[@]}"; do
+    [[ "$p" == birup ]] && continue
     pacotes+=("$(pacote_de "$p")")
   done
   [[ " ${partes[*]} " == *" tudo "* ]] && pacotes=()
-  "$ROOT/instalar-pacotes" "${pacotes[@]}"
-  limpar_antigos
+  if [[ " ${partes[*]} " != " birup " ]]; then
+    "$ROOT/instalar-pacotes" "${pacotes[@]}"
+    limpar_antigos
+  fi
+  instalar_birup
   for p in "${partes[@]}"; do
     case "$p" in
       tudo) printf '\nPronto. Salve seu trabalho, saia da sessão e entre em Birfree.\n' ;;
@@ -173,12 +194,13 @@ remover_tudo() {
     printf 'Saia do Birfree e entre no Plasma antes de remover.\n' >&2
     exit 1
   fi
-  mapfile -t instalados < <(pacman -Qq birfree birfree-vidro birfree-dock birfree-sysmon birfree-icons birfree-terminal 2>/dev/null)
+  mapfile -t instalados < <(pacman -Qq birfree birfree-compositor birfree-vidro birfree-dock birfree-sysmon birfree-icons birfree-terminal 2>/dev/null)
   ((${#instalados[@]})) || { printf 'O Birfree não está instalado.\n'; exit 0; }
   devolver=$(pacman -Qlq birfree 2>/dev/null | grep -m1 '/birfree-devolver-kde$' || true)
   [[ -n "$devolver" && -x "$devolver" ]] && XDG_CURRENT_DESKTOP=KDE "$devolver"
   [[ -f "$ESTADO/vidro-antes" ]] && desfazer_vidro
   desligar_dock
+  remover_birup
   printf 'O pacman vai mostrar a remoção e pedir confirmação.\n'
   sudo pacman -R "${instalados[@]}"
   sudo sed -i -e '\#^Include = /etc/pacman.d/birfree-congelar.conf$#d' \
@@ -190,6 +212,11 @@ remover_tudo() {
 
 remover_parte() {
   local p=$1 nome
+  if [[ "$p" == birup ]]; then
+    remover_birup
+    printf 'Birup removido.\n'
+    return
+  fi
   nome=$(pacote_de "$p") || { printf 'Parte desconhecida: %s (%s)\n' "$p" "${PARTES[*]}" >&2; exit 1; }
   if pacman -Q birfree >/dev/null 2>&1 && [[ "$nome" =~ ^birfree-(vidro|dock|sysmon)$ ]]; then
     printf 'O %s faz parte do Birfree completo instalado; para tirar, ./instalar-birfree remover\n' "$nome" >&2
@@ -224,7 +251,9 @@ case "${1:-}" in
     ((${#instalados[@]})) || instalados=(tudo)
     "$ROOT/instalar-pacotes" $(for p in "${instalados[@]}"; do pacote_de "$p"; done)
     limpar_antigos
+    instalar_birup
     printf '\nAtualização concluída. Salve seu trabalho, saia da sessão e entre novamente.\n'
+    printf 'As próximas atualizações chegam pelo Birup (menu › Birup).\n'
     ;;
   --mostrar) exec "$ROOT/instalar-pacotes" --mostrar ;;
   --migrar) shift; exec bash "$ROOT/so-birfree.sh" "$@" ;;
@@ -241,6 +270,7 @@ case "${1:-}" in
   -h|--help|ajuda) ajuda ;;
   *)
     for p in "$@"; do
+      [[ "$p" == birup ]] && continue
       pacote_de "$p" >/dev/null || { printf 'Parte desconhecida: %s\nPartes: %s (ou nada, para tudo)\n' "$p" "${PARTES[*]}" >&2; exit 1; }
     done
     instalar "$@"

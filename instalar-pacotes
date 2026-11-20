@@ -5,7 +5,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 [[ $EUID -ne 0 ]] || { echo 'Execute como usuário normal.' >&2; exit 1; }
-TODOS=(birfree-icons birfree birfree-vidro birfree-dock birfree-sysmon birfree-terminal)
+TODOS=(birfree-icons birfree-compositor birfree birfree-vidro birfree-dock birfree-sysmon birfree-terminal)
 mostrar=""
 pedidos=()
 for arg in "$@"; do
@@ -26,9 +26,9 @@ if pacman -Q birfree >/dev/null 2>&1 && [[ " ${pedidos[*]} " != *" birfree "* ]]
   printf 'O Birfree completo está instalado: as partes vão junto com ele, na mesma versão.\n'
   pedidos=("${TODOS[@]}")
 fi
-# O birfree puxa as três partes dele
+# O birfree puxa as três partes dele e o compositor (KWin-birfree)
 if [[ " ${pedidos[*]} " == *" birfree "* ]]; then
-  for p in birfree-vidro birfree-dock birfree-sysmon; do
+  for p in birfree-compositor birfree-vidro birfree-dock birfree-sysmon; do
     [[ " ${pedidos[*]} " == *" $p "* ]] || pedidos+=("$p")
   done
 fi
