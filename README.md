@@ -2,6 +2,20 @@
 
 **English** · [Português](README.pt-BR.md)
 
+> [!CAUTION]
+> **Do not download or install Birfree from this repository.** It is here to
+> show the project, not for general use. Birfree only works on an **exact
+> system version**: KWin/Plasma **6.7.5** and Qt **6.11.2** (KDE and Qt as of
+> 2026-10-01, full list in [`VERSOES.txt`](VERSOES.txt)). Current Arch is
+> already on newer versions (Plasma 6.8, Qt 6.12), and there Birfree **does not
+> start, can break session login and leave the system without a desktop**.
+>
+> To use it you would have to **lock your system** to those versions: hold KDE
+> and Qt in pacman (`IgnorePkg`/`/etc/pacman.d/birfree-congelar.conf`) and never
+> let `pacman -Syu` update them, giving up their updates, security fixes
+> included. If the lock fails or is removed, Birfree breaks on the next update.
+> If you install it anyway, it is **at your own risk** and unsupported.
+
 > [!WARNING]
 > **This is a beta.** Birfree is still in development and may have bugs,
 > including at session login. **Install at your own risk**: back up what
@@ -64,6 +78,10 @@ Wallpaper picker with Meta+Shift+click on the desktop:
 ![Wallpaper picker](imagens/papel-de-parede.jpg)
 
 ## Install
+
+> [!IMPORTANT]
+> Read the [notice at the top](#birfree-beta) first: only install on a system
+> locked to KDE 6.7.5 / Qt 6.11.2.
 
 Download the latest Release, verify it and install:
 
@@ -139,6 +157,8 @@ does not update KDE or Qt (`/etc/pacman.d/birfree-congelar.conf`).
 ## Requirements
 
 - Arch Linux x86_64 (or a pacman-based derivative), with sudo.
+- **Exactly KDE/Plasma 6.7.5 and Qt 6.11.2**, locked in pacman (see the
+  notice at the top). Birfree does not work on newer versions.
 - A graphics card with working Wayland (Birfree is Wayland only; X11 apps run
   through XWayland).
 - SDDM as the login screen (the installer applies the Birfree theme to it).

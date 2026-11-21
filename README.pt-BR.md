@@ -2,6 +2,22 @@
 
 [English](README.md) · **Português**
 
+> [!CAUTION]
+> **Não baixe nem instale o Birfree a partir deste repositório.** Ele está aqui
+> para mostrar o projeto, não para uso geral. O Birfree só funciona numa
+> **versão exata do sistema**: KWin/Plasma **6.7.5** e Qt **6.11.2** (KDE e Qt
+> de 01/10/2026, lista completa em [`VERSOES.txt`](VERSOES.txt)). O Arch de hoje
+> já está em versões mais novas (Plasma 6.8, Qt 6.12), e nelas o Birfree
+> **não abre, pode travar a entrada da sessão e deixar o sistema sem área de
+> trabalho**.
+>
+> Para usar, você teria que **travar o sistema** nessas versões: segurar o KDE
+> e o Qt no pacman (`IgnorePkg`/`/etc/pacman.d/birfree-congelar.conf`) e nunca
+> deixar um `pacman -Syu` atualizá-los, abrindo mão das atualizações deles,
+> inclusive as de segurança. Se a trava falhar ou for tirada, o Birfree quebra
+> na próxima atualização. Se mesmo assim você instalar, é **por sua conta e
+> risco** e sem suporte.
+
 > [!WARNING]
 > **Isto é um beta.** O Birfree ainda está em desenvolvimento e pode ter
 > defeitos, inclusive na entrada da sessão. **Instale por sua conta e risco**:
@@ -63,6 +79,10 @@ Seletor de papel de parede com Meta+Shift+clique na área de trabalho:
 ![Seletor de papel de parede](imagens/papel-de-parede.jpg)
 
 ## Instalar
+
+> [!IMPORTANT]
+> Leia o [aviso do começo](#birfree-beta) antes: só instale num sistema
+> travado no KDE 6.7.5 / Qt 6.11.2.
 
 Baixe a Release mais nova, confira e instale:
 
@@ -137,6 +157,8 @@ não atualiza o KDE nem o Qt (`/etc/pacman.d/birfree-congelar.conf`).
 ## Requisitos
 
 - Arch Linux x86_64 (ou derivado com pacman), com sudo.
+- **KDE/Plasma 6.7.5 e Qt 6.11.2 exatamente**, travados no pacman (veja o
+  aviso do começo). Em versões mais novas o Birfree não funciona.
 - Placa de vídeo com Wayland funcionando (o Birfree é só Wayland; apps X11
   abrem pelo XWayland).
 - SDDM como tela de entrada (o instalador põe o tema do Birfree nela).
